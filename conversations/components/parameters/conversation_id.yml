@@ -1,0 +1,8 @@
+conversation_id:
+  name: conversation_id
+  in: path
+  required: true
+  description: Conversation ID
+  example: CON-f972836a-550f-45fa-956c-12a2ab5b7d22
+  schema:
+    type: string

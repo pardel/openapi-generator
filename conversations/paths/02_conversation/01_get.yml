@@ -1,0 +1,16 @@
+get:
+  operationId: retrieveConversation
+  tags:
+    - conversation
+  summary: Retrieve a conversation
+  responses:
+    "200":
+      description: Retrieve a conversation
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Conversation Object
+            $ref: "#/components/schemas/conversation"
+            required:
+              - uuid

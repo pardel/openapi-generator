@@ -1,0 +1,23 @@
+    order:
+      name: order
+      in: query
+      description: Return the records in ascending or descending order.
+      required: false
+      schema:
+        type: string
+        default: asc
+        enum:
+          - asc
+          - desc
+          - ASC
+          - DESC
+    cursor:
+      name: cursor
+      in: query
+      description: |
+        The cursor to start returning results from.
+
+        You are not expected to provide this manually, but to follow the url provided in `_links.first.href`, `_links.prev.href` or `_links.next.href` in the response which contains a `cursor` value.
+      schema:
+        type: string
+      required: false

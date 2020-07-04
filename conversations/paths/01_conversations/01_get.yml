@@ -1,0 +1,60 @@
+get:
+  operationId: get-conversations
+  tags:
+    - conversation
+  summary: List Conversations
+  description: Please note that not all data is available in the list endpoint. Once  you've identified the conversation you need to work with, use the [GET /conversations/:id](#get-conversation) endpoint to fetch all of the conversation details
+  parameters:
+    - $ref: "#/components/parameters/page_size"
+    - $ref: "#/components/parameters/order"
+    - $ref: "#/components/parameters/cursor"
+    - $ref: "#/components/parameters/date_start"
+    - $ref: "#/components/parameters/date_end"
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            properties:
+              page_size:
+                type: integer
+                example: 10
+                description: The number of results returned on this page.
+              _embedded:
+                type: object
+                x-nexmo-developer-collection-description-shown: true
+                properties:
+                  conversations:
+                    type: array
+                    description: List of conversations matching the provided filter
+                    items:
+                      $ref: "#/components/schemas/conversation_lite"
+                    
+              _links:
+                type: object
+                properties:
+                  first:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        example: "https://api.nexmo.com/v0.3/conversations?order=desc&page_size=10"
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        example: "https://api.nexmo.com/v0.3/conversations?order=desc&page_size=10&cursor=88b395c167da4d94e929705cbd63b82973771e7d390d274a58e301386d5762600a3ffd799bfb3fc5190c5a0d124cdd0fc72fe6e450506b18e4e2edf9fe84c7a0"
+                  next:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        example: "https://api.nexmo.com/v0.3/conversations?order=desc&page_size=10&cursor=88b395c167da4d94e929705cbd63b829a650e69a39197bfd4c949f4243f60dc4babb696afa404d2f44e7775e32b967f2a1a0bb8fb259c0999ba5a4e501eaab55"
+                  prev:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        example: "https://api.nexmo.com/v0.3/conversations?order=desc&page_size=10&cursor=069626a3de11d2ec900dff5042197bd75f1ce41dafc3f2b2481eb9151086e59aae9dba3e3a8858dc355232d499c310fbfbec43923ff657c0de8d49ffed9f7edb"

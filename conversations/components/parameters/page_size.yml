@@ -1,0 +1,7 @@
+page_size:
+  name: page_size
+  in: query
+  description: Return this amount of records in the response
+  required: false
+  schema:
+    $ref: "#/components/schemas/page_size"

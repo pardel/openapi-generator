@@ -1,0 +1,18 @@
+date_start:
+  name: date_start
+  in: query
+  required: false
+  description: Return the records that occurred after this point in time.
+  schema:
+    example: "2018-01-01 10:00:00"
+    type: string
+    format: dateTime
+date_end:
+  name: date_end
+  in: query
+  required: false
+  description: Return the records that occurred before this point in time.
+  schema:
+    example: "2018-01-01 12:00:00"
+    type: string
+    format: dateTime

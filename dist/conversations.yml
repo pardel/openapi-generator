@@ -1,0 +1,217 @@
+---
+openapi: 3.0.0
+servers:
+- url: https://api.nexmo.com/v0.3
+info:
+  version: 1.7.8
+  title: Nexmo Conversation API
+  description: The Nexmo Conversation API enables you to build conversation features
+    where communication can take place across multiple mediums including IP Messaging,
+    PSTN Voice, SMS and WebRTC Audio and Video. The context of the conversations is
+    maintained though each communication event taking place within a conversation,
+    no matter the medium.
+  contact:
+    name: Nexmo DevRel
+    email: devrel@nexmo.com
+    url: https://developer.nexmo.com/
+  x-label: Beta
+security:
+- bearerAuth: []
+tags:
+- name: conversation
+  description: A conversation is a shared core component that Nexmo APIs rely on.
+    Conversations happen over multiple mediums and and can have associated Users through
+    Memberships.
+- name: user
+  description: The concept of a user exists in Nexmo APIs, you can associate one with
+    a user in your own application if you choose. A user can have multiple memberships
+    to conversations and can communicate with other users through various different
+    mediums.
+- name: member
+  description: Memberships connect users with conversations. Each membership has one
+    conversation and one user however a user can have many memberships to conversations
+    just as conversations can have many members.
+- name: event
+  description: 'Events are actions that occur within a conversation. Examples of this
+    includes: Text events from members, or invite events from users'
+- name: leg
+  description: A leg can be a video call, IP call, or PSTN call that users participate
+    in using multiple platforms. With this endpoint you can retrieve the details about
+    all of the legs that took place in your application.
+- name: rtc
+  description: Rtc actions. Any rtc action related (like starting a new rtc connection).
+components:
+  schemas:
+    conversation_id:
+      type: string
+      example: CON-63f61863-4a51-4f6b-86e1-46edebio0391
+      description: The automatically generated unique identifier for this conversation
+    conversation_name:
+      type: string
+      example: customer_chat
+      description: The internal unique name for this conversation
+    conversation_display_name:
+      type: string
+      example: Customer Chat
+      description: The public facing name of the conversation
+    conversation_image_url:
+      type: string
+      example: https://example.com/image.png
+      description: An URL for the image associated with the conversation
+    conversation_created_at:
+      type: string
+      format: dateTime
+      example: '2019-09-03T18:40:24.324Z'
+      description: The time that the conversation was created
+    conversation_lite:
+      type: object
+      properties:
+        id:
+          type: string
+          example: CON-afe887d8-d587-4280-9aae-dfa4c9227d5e
+          description: The ID of the conversation
+        name:
+          "$ref": "#/components/schemas/conversation_name"
+        display_name:
+          "$ref": "#/components/schemas/conversation_display_name"
+        image_url:
+          "$ref": "#/components/schemas/conversation_image_url"
+        created_at:
+          "$ref": "#/components/schemas/conversation_created_at"
+        _links:
+          type: object
+          properties:
+            self:
+              type: object
+              properties:
+                href:
+                  type: string
+                  example: https://api.nexmo.com/v0.3/conversations/CON-afe887d8-d587-4280-9aae-dfa4c9227d5e
+    page_size:
+      type: number
+      description: The number of results returned per page.   The default value is
+        `10`. The maximum value is `100`.
+      minimum: 1
+      maximum: 100
+      default: 10
+  parameters:
+    date_start:
+      name: date_start
+      in: query
+      required: false
+      description: Return the records that occurred after this point in time.
+      schema:
+        example: '2018-01-01 10:00:00'
+        type: string
+        format: dateTime
+    date_end:
+      name: date_end
+      in: query
+      required: false
+      description: Return the records that occurred before this point in time.
+      schema:
+        example: '2018-01-01 12:00:00'
+        type: string
+        format: dateTime
+    conversation_id:
+      name: conversation_id
+      in: path
+      required: true
+      description: Conversation ID
+      example: CON-f972836a-550f-45fa-956c-12a2ab5b7d22
+      schema:
+        type: string
+    order:
+      name: order
+      in: query
+      description: Return the records in ascending or descending order.
+      required: false
+      schema:
+        type: string
+        default: asc
+        enum:
+        - asc
+        - desc
+        - ASC
+        - DESC
+    cursor:
+      name: cursor
+      in: query
+      description: |
+        The cursor to start returning results from.
+
+        You are not expected to provide this manually, but to follow the url provided in `_links.first.href`, `_links.prev.href` or `_links.next.href` in the response which contains a `cursor` value.
+      schema:
+        type: string
+      required: false
+    page_size:
+      name: page_size
+      in: query
+      description: Return this amount of records in the response
+      required: false
+      schema:
+        "$ref": "#/components/schemas/page_size"
+paths:
+  "/conversations":
+    get:
+      operationId: get-conversations
+      tags:
+      - conversation
+      summary: List Conversations
+      description: "Please note that not all data is available in the list endpoint.
+        Once \nyou've identified the conversation you need to work with, use the \n[GET
+        /conversations/:id](#get-conversation) endpoint to fetch all of the conversation
+        details\n"
+      parameters:
+      - "$ref": "#/components/parameters/page_size"
+      - "$ref": "#/components/parameters/order"
+      - "$ref": "#/components/parameters/cursor"
+      - "$ref": "#/components/parameters/date_start"
+      - "$ref": "#/components/parameters/date_end"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  page_size:
+                    type: integer
+                    example: 10
+                    description: The number of results returned on this page.
+                  _embedded:
+                    type: object
+                    x-nexmo-developer-collection-description-shown: true
+                    properties:
+                      conversations:
+                        type: array
+                        description: List of conversations matching the provided filter
+                        items:
+                          "$ref": "#/components/schemas/conversation_lite"
+                  _links:
+                    type: object
+                    properties:
+                      first:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                            example: https://api.nexmo.com/v0.3/conversations?order=desc&page_size=10
+                      self:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                            example: https://api.nexmo.com/v0.3/conversations?order=desc&page_size=10&cursor=88b395c167da4d94e929705cbd63b82973771e7d390d274a58e301386d5762600a3ffd799bfb3fc5190c5a0d124cdd0fc72fe6e450506b18e4e2edf9fe84c7a0
+                      next:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                            example: https://api.nexmo.com/v0.3/conversations?order=desc&page_size=10&cursor=88b395c167da4d94e929705cbd63b829a650e69a39197bfd4c949f4243f60dc4babb696afa404d2f44e7775e32b967f2a1a0bb8fb259c0999ba5a4e501eaab55
+                      prev:
+                        type: object
+                        properties:
+                          href:
+                            type: string
+                            example: https://api.nexmo.com/v0.3/conversations?order=desc&page_size=10&cursor=069626a3de11d2ec900dff5042197bd75f1ce41dafc3f2b2481eb9151086e59aae9dba3e3a8858dc355232d499c310fbfbec43923ff657c0de8d49ffed9f7edb

@@ -1,0 +1,24 @@
+conversation:
+  type: object
+  properties:
+    id:
+      type: string
+      example: CON-afe887d8-d587-4280-9aae-dfa4c9227d5e
+      description: The ID of the conversation
+    name:
+      $ref: "#/components/schemas/conversation_name"
+    display_name:
+      $ref: "#/components/schemas/conversation_display_name"
+    image_url:
+      $ref: "#/components/schemas/conversation_image_url"
+    created_at:
+      $ref: "#/components/schemas/conversation_created_at"
+    _links:
+      type: object
+      properties:
+        self:
+          type: object
+          properties:
+            href:
+              type: string
+              example: "https://api.nexmo.com/v0.3/conversations/CON-afe887d8-d587-4280-9aae-dfa4c9227d5e"

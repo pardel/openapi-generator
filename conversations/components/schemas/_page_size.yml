@@ -1,0 +1,6 @@
+page_size:
+  type: number
+  description:  The number of results returned per page.   The default value is `10`. The maximum value is `100`.
+  minimum: 1
+  maximum: 100
+  default: 10
